@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             String courseName = parts[2];
 
             waitingTxt.setText("Etudiant " + idStudent + " présent ! ");
-            waitingTxt.setTextColor(Color.GREEN);
+            waitingTxt.setTextColor(Color.BLACK);
 
             CourseService courseService = new CourseService();
             Course course = new Course();
