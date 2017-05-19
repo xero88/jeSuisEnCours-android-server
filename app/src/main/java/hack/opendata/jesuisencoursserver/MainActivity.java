@@ -6,11 +6,13 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,11 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String NAME = "MY_NAME"; // TODO
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805f9b34fb"); // Todo
+    private TextView waitingTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        waitingTxt = (TextView) findViewById(R.id.waitingTxt);
 
         if (mBluetoothAdapter != null) {
 
@@ -39,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
             else {
                 new AcceptThread().start();
             }
-
-            // Establish connection to the proxy.
-            //mBluetoothAdapter.getProfileProxy(this, mProfileListener, BluetoothProfile.HEADSET);
 
 
         } else {
@@ -159,6 +161,24 @@ public class MainActivity extends AppCompatActivity {
             String readMessage = new String(readBuf, 0, msg.arg1);
 
             Log.e(TAG, "handleMessage: " + readMessage);
+
+            String[] parts = readMessage.split("/");
+            String idStudent = parts[0];
+            String dateString = parts[1];
+            String courseName = parts[2];
+
+            waitingTxt.setText("Etudiant " + idStudent + " présent ! ");
+            waitingTxt.setTextColor(Color.GREEN);
+
+            CourseService courseService = new CourseService();
+            Course course = new Course();
+            course.setName(courseName);
+            courseService.setPresentCourse(course, dateString, new CourseService.ValidatedCourseCallback() {
+                @Override
+                public void courseValidated() {
+                    Log.e(TAG, "courseValidated:");
+                }
+            });
 
         }
     };

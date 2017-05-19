@@ -10,7 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import hack.opendata.jesuisencours.JSECApp;
+import hack.opendata.jesuisencoursserver.JSECApp;
 
 /**
  * Created by bernara3 on 19.05.17.
